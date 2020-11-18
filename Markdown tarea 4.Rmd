@@ -71,16 +71,42 @@ Según supuestos no se pueden realizar pruebas paramétricas
 
 ## Análisis estadístico
 
-Como son conteos y distribucion tiende a ser Poisson se realiza regresion lineal de Poisson para todas las variables
+Como son conteos y distribucion tiende a ser Poisson se realiza regresion lineal de Poisson por separado para cada variable predictora con respecto a D.
 
 ```{r}
 # Como son conteos y distribucion tiende a ser Poisson se realiza regresion lineal de Poisson
 # para todas las variables
-modelo_glm <- glm(D ~ . -D, data = Tarea4, family = poisson)
-summary(modelo_glm) 
+
+modelo_glmA <- glm(D ~ A, data = Tarea4, family = poisson)
+summary(modelo_glmA)
+
+modelo_glmP <- glm(D ~ P, data = Tarea4, family = poisson)
+summary(modelo_glmP)
+
+modelo_glmL <- glm(D ~ L, data = Tarea4, family = poisson)
+summary(modelo_glmL)
+
+modelo_glmH1 <- glm(D ~ H1, data = Tarea4, family = poisson)
+summary(modelo_glmH1)
+
+modelo_glmH2 <- glm(D ~ H2, data = Tarea4, family = poisson)
+summary(modelo_glmH2)
+
+modelo_glmH3 <- glm(D ~ H3, data = Tarea4, family = poisson)
+summary(modelo_glmH3)
+
+modelo_glmH4 <- glm(D ~ H4, data = Tarea4, family = poisson)
+summary(modelo_glmH4)
+
+modelo_glmH5 <- glm(D ~ H5, data = Tarea4, family = poisson)
+summary(modelo_glmH5)
+
 ```
 
-Las variables que presentan significancia predictora con respecto a D respuesta, son: A, P, H1, H2 y H4.
+Para un intervalo de confianza del 95%, la variable respuesta muestra dependencia ante todas las variables predictoras.
 
-
-
+---
+### Información de sesión
+```{r session, echo=FALSE}
+sessionInfo() # Información de la sesión
+```
