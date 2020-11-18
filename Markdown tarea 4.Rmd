@@ -1,0 +1,86 @@
+---
+title: "Tarea 4"
+author: "Ian Azofeifa Flores, Kenneth Barrantes Fallas, Marvin Muñoz Zamora"
+date: "19/11/2020"
+output: html_document
+---
+
+## Llamar datos
+
+```{r}
+Tarea4 <- read.csv("Datos_tarea4.csv", sep = ",")
+
+A.factor <- as.factor(Tarea4$A)
+levels(A.factor)
+
+P.factor <-as.factor(Tarea4$P)
+levels(P.factor)
+```
+
+## Supuestos parametricas
+
+### Prueba de normalidad 
+```{r}
+D.test <- shapiro.test(Tarea4$D) # Prueba Shapiro para normalidad
+print(D.test)
+
+plotn <- function(x,main="Histograma de frecuencias \ny distribuci?n normal",
+                  xlab="D",ylab="Variabilidad") {
+  min <- min(x)
+  max <- max(x)
+  media <- mean(x)
+  dt <- sd(x)
+  hist(x,freq=F,main=main,xlab=xlab,ylab=ylab)
+  curve(dnorm(x,media,dt), min, max,add = T,col="blue")
+}
+
+```
+
+### Se realiza un gráfico de distribución para los datos
+
+
+```{r}
+plotn(Tarea4$D,main="Distribuci?n normal") # Grafico distribución
+
+```
+
+### Prueba de varianzas 
+
+```{r}
+bartlett.test(Tarea4$D ~ Tarea4$A)  # Hay diferencia entre las varianzas 
+bartlett.test(Tarea4$D ~ Tarea4$P)  # No hay diferencia entre las varianzas
+bartlett.test(Tarea4$D ~ Tarea4$L)  # Hay diferencia entre las varianzas
+bartlett.test(Tarea4$D ~ Tarea4$H1) # No hay diferencia entre las varianzas
+bartlett.test(Tarea4$D ~ Tarea4$H2) # Hay diferencia entre las varianzas
+bartlett.test(Tarea4$D ~ Tarea4$H3) # Hay diferencia entre las varianzas
+bartlett.test(Tarea4$D ~ Tarea4$H4) # No hay diferencia entre las varianzas
+bartlett.test(Tarea4$D ~ Tarea4$H5) # Hay diferencia entre las varianzas
+
+```
+
+### Homocedasticidad
+
+```{r}
+library(car) # Para homocedasticidad
+leveneTest(Tarea4$D ~ A.factor) # Si diferencia significativa para variables entre los grupos
+leveneTest(Tarea4$D ~ P.factor) # No diferencia significativa para las variables en los grupos
+```
+
+Según supuestos no se pueden realizar pruebas paramétricas
+
+
+## Análisis estadístico
+
+Como son conteos y distribucion tiende a ser Poisson se realiza regresion lineal de Poisson para todas las variables
+
+```{r}
+# Como son conteos y distribucion tiende a ser Poisson se realiza regresion lineal de Poisson
+# para todas las variables
+modelo_glm <- glm(D ~ . -D, data = Tarea4, family = poisson)
+summary(modelo_glm) 
+```
+
+Las variables que presentan significancia predictora con respecto a D respuesta, son: A, P, H1, H2 y H4.
+
+
+
