@@ -71,87 +71,28 @@ Según supuestos no se pueden realizar pruebas paramétricas
 
 ## Análisis estadístico
 
-Como son conteos y distribucion tiende a ser Poisson se realiza regresion lineal de Poisson por separado para cada variable predictora con respecto a D.
 
-```{r}
-# Como son conteos y distribucion tiende a ser Poisson se realiza regresion lineal de Poisson
-# para todas las variables
-
-modelo_glmA <- glm(D ~ A, data = Tarea4, family = poisson)
-summary(modelo_glmA)
-
-modelo_glmP <- glm(D ~ P, data = Tarea4, family = poisson)
-summary(modelo_glmP)
-
-modelo_glmL <- glm(D ~ L, data = Tarea4, family = poisson)
-summary(modelo_glmL)
-
-modelo_glmH1 <- glm(D ~ H1, data = Tarea4, family = poisson)
-summary(modelo_glmH1)
-
-modelo_glmH2 <- glm(D ~ H2, data = Tarea4, family = poisson)
-summary(modelo_glmH2)
-
-modelo_glmH3 <- glm(D ~ H3, data = Tarea4, family = poisson)
-summary(modelo_glmH3)
-
-modelo_glmH4 <- glm(D ~ H4, data = Tarea4, family = poisson)
-summary(modelo_glmH4)
-
-modelo_glmH5 <- glm(D ~ H5, data = Tarea4, family = poisson)
-summary(modelo_glmH5)
-
-```
-
-Para un intervalo de confianza del 95%, la variable respuesta muestra dependencia ante todas las variables predictoras.
-
-### Modelos extra
-Regresiones de Poison con variable respuesta P 
+Como son conteos y distribucion tiende a ser poisson se realiza regresion lineal de quasipoisson respecto a D. Se realiza quasipoisson por sobredispersión en los datos (identificada por varianza mayor que media). Se utilizan unicamente las variables de latitud y ambientales como predictoras, tomando como referencia DAG.
 
 ```{r}
 
-modelo_glmP1 <- glm(P ~ H1, data = Tarea4, family = poisson)
-summary(modelo_glmP1)
+var(Tarea4$D)
+mean(Tarea4$D)
 
-modelo_glmP2 <- glm(P ~ H2, data = Tarea4, family = poisson)
-summary(modelo_glmP2)
-
-modelo_glmP3 <- glm(P ~ H3, data = Tarea4, family = poisson)
-summary(modelo_glmP3)
-
-modelo_glmP4 <- glm(P ~ H4, data = Tarea4, family = poisson)
-summary(modelo_glmP4)
-
-modelo_glmP5 <- glm(P ~ H5, data = Tarea4, family = poisson)
-summary(modelo_glmP5)
+modelo_quasi <- glm(D ~ . -D -A -P, data = Tarea4, family = quasipoisson)
+summary(modelo_quasi)
 
 
 ```
 
-Regresiones de Poison con variable respuesta A
+Para un intervalo de confianza del 95%, la variable respuesta muestra dependencia ante las variables predictoras H1, H2 y H4 por lo que la cantidad de genes expresados es regulada por los valores que poseen estas variables. El modelo tiene una sobredispersión de 1.19.
 
 ```{r}
-
-modelo_glmA1 <- glm(A ~ H1, data = Tarea4, family = poisson)
-summary(modelo_glmA1)
-
-modelo_glmA2 <- glm(A ~ H2, data = Tarea4, family = poisson)
-summary(modelo_glmA2)
-
-modelo_glmA3 <- glm(A ~ H3, data = Tarea4, family = poisson)
-summary(modelo_glmA3)
-
-modelo_glmA4 <- glm(A ~ H4, data = Tarea4, family = poisson)
-summary(modelo_glmA4)
-
-modelo_glmA5 <- glm(A ~ H5, data = Tarea4, family = poisson)
-summary(modelo_glmA5)
-
+plot(modelo_quasi)
 
 ```
 
 
-Agregamos modelos de regresion lineal de Poisson usando P y A como variables respuesta frente a variables predictoras ambientales (h1, h2, h3, h4, h5). De este análisis se obtine para un 95% de confianza que todos los factores ambientales afectan la distribución de P y que para A solamente lo hacen h2, h3 y h4.
 
 ---
 ### Información de sesión
