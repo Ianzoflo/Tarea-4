@@ -71,61 +71,27 @@ Según supuestos no se pueden realizar pruebas paramétricas
 
 ## Análisis estadístico
 
-Como son conteos y distribucion tiende a ser poisson se realiza regresion lineal de quasipoisson por separado para cada variable predictora con respecto a D. Se realiza quasipoisson por sobredispersión en los datos (identificada por varianza mayor que media).
+
+Como son conteos y distribucion tiende a ser poisson se realiza regresion lineal de quasipoisson respecto a D. Se realiza quasipoisson por sobredispersión en los datos (identificada por varianza mayor que media). Se utilizan unicamente las variables de latitud y ambientales como predictoras, tomando como referencia DAG.
 
 ```{r}
 
 var(Tarea4$D)
 mean(Tarea4$D)
 
-modelo_quasi <- glm(D ~ . -D, data = Tarea4, family = quasipoisson)
+modelo_quasi <- glm(D ~ . -D -A -P, data = Tarea4, family = quasipoisson)
 summary(modelo_quasi)
 
 
 ```
 
-Para un intervalo de confianza del 95%, la variable respuesta muestra dependencia ante las variables predictoras A, P, H1, H2 y H4. El modelo tiene una sobredispersión de 1.19.
+Para un intervalo de confianza del 95%, la variable respuesta muestra dependencia ante las variables predictoras H1, H2 y H4 por lo que la cantidad de genes expresados es regulada por los valores que poseen estas variables. El modelo tiene una sobredispersión de 1.19.
 
 ```{r}
 plot(modelo_quasi)
 
 ```
 
-
-### Modelos extra
-Regresiones de quasipoisson con variable respuesta P 
-
-```{r}
-
-var(Tarea4$P)
-mean(Tarea4$P)
-
-
-modelo_quasiP <- glm(P ~ . -A -P -L -D, data = Tarea4, family = quasipoisson)
-summary(modelo_quasiP)
-
-plot(modelo_quasiP)
-
-
-```
-
-Regresiones de quasipoisson con variable respuesta A
-
-```{r}
-
-var(Tarea4$A)
-mean(Tarea4$A)
-
-modelo_quasiA <- glm(A ~ . -A -P -L -D, data = Tarea4, family = quasipoisson)
-summary(modelo_quasiA)
-
-plot(modelo_quasiA)
-
-
-```
-
-
-Agregamos modelos de regresion lineal de quasipoisson usando P y A como variables respuesta frente a variables predictoras ambientales (h1, h2, h3, h4, h5). De este análisis se obtine para un 95% de confianza que todos los factores ambientales afectan las ditribuciones de P y A. Para P hay sobredispersión de 9.00 y para A de 1.38.
 
 
 ---
